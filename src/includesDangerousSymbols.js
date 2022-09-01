@@ -11,6 +11,7 @@
 // "Z" - 90
 // "a" - 97
 // "z" - 122
+//TODO: избавиться от магических чисел и комментариев при помоищи symbol.charCodeAt()
 
 module.exports = function includesDangerousSymbols(str){
 	const checkInTheRange = (from, to, symbol) => symbol.charCodeAt() >= from && symbol.charCodeAt() <= to
