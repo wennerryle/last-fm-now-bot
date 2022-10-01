@@ -19,10 +19,9 @@ module.exports = class LFapi{
 					format: 'json',
 					...params
 			}))
-			
-			console.log(response.data.recenttracks.track[0].image)
 
 			return response.data
+			
 		} catch(error){
 			console.log('ERROR: ' + error)
 		}
