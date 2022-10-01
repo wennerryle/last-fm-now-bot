@@ -1,10 +1,12 @@
+//TODO: избавиться от зависимости imgBB
 require('dotenv').config()
+const memoize = require('lodash.memoize')
 const Jimp = require('jimp')
 const imgbbUploader = require('imgbb-uploader')
 
-module.exports = async function imageGenerate(nickname = '', author = '', nameOfSong = '',
+module.exports = memoize(async function imageGenerate(nickname = '', author = '', nameOfSong = '',
 		album = '', imageURL = 'https://cataas.com/cat'){
-	try{
+	try {
 		const albumImage = await Jimp.read(imageURL)
 
 		const albumImageForBackground = await albumImage.clone()
@@ -25,7 +27,7 @@ module.exports = async function imageGenerate(nickname = '', author = '', nameOf
 
 		return await albumImageForBackground
 			.blit(albumImage, 20, 20)
-			.print(notosansRegular, 204, 20, nickname + ' неслушает')
+			.print(notosansRegular, 204, 20, nickname + ' слушает')
 			.print(notosansRegular, 204, 62, nameOfSong)
 			.print(montserratSemiBold, 204, 94, author)
 			.print(notosansRegular, 204, 130, album)
@@ -38,7 +40,7 @@ module.exports = async function imageGenerate(nickname = '', author = '', nameOf
 				})
 			})
 
-	}catch(err){
+	} catch(err) {
 		console.log(err)
 	}
-}
+})
