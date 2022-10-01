@@ -1,5 +1,5 @@
-//TODO разделить бизнес логику и реализацию
-
+//TODO: разделить бизнес логику и реализацию
+//TODO: вынести сообщения в отдельный файл
 require('dotenv').config()
 const { Telegraf }= require('telegraf')
 const { v4: uuidv4 } = require('uuid')
@@ -66,11 +66,9 @@ bot.command('/nickname', async (ctx) => {
 })
 
 bot.on('inline_query', async (ctx) => {
-	console.log(ctx)
-	let ID = ctx.update.inline_query.from.id
-	let username = '@' + ctx.update.inline_query.from.username
-	console.log(username)
-	let isUserExists = await users.isUserExists(ID)
+	const ID = ctx.update.inline_query.from.id
+	const username = '@' + ctx.update.inline_query.from.username
+	const isUserExists = await users.isUserExists(ID)
 
 	if (!isUserExists){
 		return ctx.answerInlineQuery([], {
@@ -86,6 +84,7 @@ bot.on('inline_query', async (ctx) => {
 		user: await users.getNicknameWithID(ID)
 	})
 
+	console.log(tracks.recenttracks.track)
 	// tracks.recenttracks.track.forEach(e => console.log(e.image))
 	if(tracks === undefined){
 		return ctx.answerInlineQuery([], {
@@ -97,7 +96,6 @@ bot.on('inline_query', async (ctx) => {
 	}
 
 	let lastTrack = tracks.recenttracks.track[0]
-	console.log(lastTrack)
 	if(lastTrack === undefined){
 		return ctx.answerInlineQuery([], {
 			is_personal: true,
@@ -107,20 +105,21 @@ bot.on('inline_query', async (ctx) => {
 		})
 	}
 	
-	let artist = lastTrack.artist['#text']
-	let titleOfSong = lastTrack.name
-	let album = lastTrack.album['#text']
-	let image = lastTrack.image[2]['#text'] || 'https://cataas.com/cat'
+	const artist = lastTrack.artist['#text']
+	const titleOfSong = lastTrack.name
+	const album = lastTrack.album['#text']
+	const image = lastTrack.image[2]['#text'] || 'https://cataas.com/cat'
 	
 	const urlImage = await imageGenerate(username, artist, titleOfSong, album, image)
 	
-	console.log(urlImage)
+	console.log(urlImage.image.url)
 
 	const res = [{
    		type: 'photo',
    		id: uuidv4(),
-   		photo_url: urlImage.url,
-   		thumb_url: urlImage.url
+   		photo_url: urlImage.image.url,
+   		thumb_url: urlImage.image.url,
+		input_message_content: {message_text: artist + ' - ' + titleOfSong}
 	}]
 
 
