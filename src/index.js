@@ -1,12 +1,11 @@
 //TODO: разделить бизнес логику и реализацию
-//TODO: вынести сообщения в отдельный файл
 require('dotenv').config()
 const { Telegraf }= require('telegraf')
 const { v4: uuidv4 } = require('uuid')
 const imageGenerate = require('./imageGenerate/imageGenerate.js')
 
 const includesDangerousSymbols = require('./includesDangerousSymbols.js')
-const LFapi = require('./LFapi.js');
+const LFapi = new require('./LFapi.js');
 const api = new LFapi(process.env.LAST_FM_TOKEN)
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
@@ -16,25 +15,7 @@ const users = new Users()
 
 users.init()
 
-const messages = {
-	onHelp: `@vkxci - лучший плеер
-Если вы хотите связаться с автором
--  @wennerryle`,
-
-	onStart1: 'Привет. Я использую last.fm в качестве поставщика музыки, для отправки музыки, которую ты слушаешь прямо сейчас.',
-	onStart2: 'Поэтому для продолжения введи свой ник при помощи команды /nickname %НИК на last.fm%.',
-	onStart3: 'Пример:\n\n' +
-	'"/nickname wennerryle"\n' + 
-	'Для дополнительной информации:\n/help',
-
-	botOnReload: 'Попробуйте снова через минуту, бот находится в перезапуске',
-	badNickname: 'Ваш никнейм не может быть таким ;)\n' + 
-	'Введите /nickname и ваш ник с last.fm',
-
-	afterSetNickname: 'Круто! Теперь попробуйте ввести @wennernowbot и посмотрите что получится!',
-	ifNotSendNickname: 'Чтобы поставить ник, или его обновить введите\n' +
-	'/nickname и ваш никнейм на last.fm',
-}
+const messages = require('./messages.json')
 
 bot.start(async ctx => startMessage(ctx))
 
