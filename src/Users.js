@@ -1,7 +1,3 @@
-// db.run(
-// 'CREATE TABLE users(id, nickname)'
-// )
-
 const createDB = require('./DB.js')
 
 class Users{
@@ -13,6 +9,8 @@ class Users{
 		 )`,
 			filePath: './db.sqlite3'
 		})
+
+		console.log('DB created.')
 	}
 
 	async isUserExists(id){
